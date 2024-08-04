@@ -20,6 +20,7 @@
     font-size: 24px;
     color: #f9faf8;
     font-weight: bold;
+    margin-left: 120px;
 }
 ul {
     display: flex;
@@ -44,6 +45,7 @@ img {
 .hero-text {
     display: flex;
     flex-direction: column;
+    margin-left: 120px;
  }
 
 .hero-content {
@@ -52,6 +54,7 @@ img {
     background-color: #1f2937;
     padding: 48px;
     flex-wrap: wrap;
+
 }
 .subtext {
     padding-left: 60px;
@@ -141,18 +144,45 @@ button {
     font-weight: 600;
 }
 
-
-.action-by {
+.action {
+    display: flex;
+    background-color: #3882f6;
+    border-radius: 4px;
+    margin: 180px;
+    padding: 40px;
+    justify-content: center;
+}
+.blue-card {
 
     justify-content: center;
     display: flex;
     flex-direction: column;
-    background-color: #3882f6;
- 
+}
+
+.button-action {
+    border: 3px solid #e5e7eb ;
+    border-radius: 8px;
+    margin-left: 240px;
+    padding: 0px;
+}
+
+.bold-text {
+    font-size: 18px;
+    color: #e5e7eb;
+    font-weight: 800;
+}
+
+.action-text {
+    font : 12px;
+    color: #e5e7eb;
+    font-weight: 400;
+}
+
+.footer {
+    display: flex;
     align-items: center;
+    justify-content: center;
+    background-color: #1f2937;
+    color: #f5f5f5;
+    padding: 40px;
 }
-
-.blue-card {
-    width: 400px;
-}
-
