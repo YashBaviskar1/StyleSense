@@ -153,7 +153,6 @@ button {
     justify-content: center;
 }
 .blue-card {
-
     justify-content: center;
     display: flex;
     flex-direction: column;
@@ -185,4 +184,61 @@ button {
     background-color: #1f2937;
     color: #f5f5f5;
     padding: 40px;
+}
+
+/* RECCEMONDATION PAGE */
+.hero-text-rec-page {
+    margin-left: auto;
+    margin-right: auto;
+ }
+
+ .heading-text-rec-page {
+    width: 600px;
+    font-size: 30px;
+    font-weight: 900;
+}
+
+.subtext-rec-page {
+    width : 400px;
+
+}
+
+.main-body {
+    display: flex;
+    justify-content: center;
+    margin-right: 20%;
+    gap : 25px;
+}
+
+.upload-label  {
+    display: flex;
+    justify-content: center;
+    justify-items: auto;
+    padding: 2px;
+    font-size: 21px;
+    border-radius: 0.3rem;
+    font-weight: 400;
+    color: #d2d7dd;
+    background-color: #1f2937;
+    width: 150px;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: 72%;
+}
+
+.upload-label:hover {
+    border: 1px solid rgb(45, 44, 44);
+}
+
+.image-preview {
+    margin-top: 20px;
+    padding: 10px;
+    border: 10px solid rgb(143, 140, 140);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2rem;
+    height: 300px;
+    width: 350px;
 }
