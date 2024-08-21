@@ -32,7 +32,7 @@ ul {
 
 }
 
-a {
+.hero a {
     text-decoration: none;
     color: #e5e7eb;
 }
@@ -204,10 +204,13 @@ button {
 }
 
 .main-body {
-    display: flex;
-    justify-content: center;
+    align-items: center;
     margin-right: 20%;
     gap : 25px;
+}
+.top-body {
+    display: flex;
+    flex-direction: row;
 }
 
 .upload-label  {
@@ -225,6 +228,7 @@ button {
     margin-top: 20px;
     margin-left: auto;
     margin-right: 72%;
+    margin-left: 120px;
 }
 
 .upload-label:hover {
@@ -233,6 +237,36 @@ button {
 
 .image-preview {
     margin-top: 20px;
+    margin: 40px;
+    padding: 10px;
+    border: 10px solid rgb(143, 140, 140);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 2rem;
+    height: 300px;
+    width: 350px;
+}
+
+.output-images {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-right: auto;
+}
+
+.output-text {
+    padding: 50px;
+    margin-left: 50%;
+    font-size: 24px;
+    color: #4f49c0;
+    font-weight: bold;
+}
+
+.rec-images {
+    margin-top: 20px;
+    margin: 40px;
     padding: 10px;
     border: 10px solid rgb(143, 140, 140);
     background-size: contain;
