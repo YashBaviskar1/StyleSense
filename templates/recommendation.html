@@ -29,8 +29,12 @@
 
         <div class="main-body">
             <div class="top-body">
-            <div class="upload"><input type="file" id="image-upload" onchange="upload()" hidden>
+            <div class="upload">
+                <form action="/recommendation" method="post" enctype="multipart/form-data">
+                <input type="file" id="image-upload" onchange="upload()" name="image" hidden/>
                 <label for="image-upload" class="upload-label">Upload Image</label>
+                <button type="submit">Show Reccomandation</button>
+                </form>
             </div>
             <div class="image-preview">
             </div>
