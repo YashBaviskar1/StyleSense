@@ -36,17 +36,35 @@
                 <button type="submit">Show Reccomandation</button>
                 </form>
             </div>
-            <div class="image-preview">
-            </div>
+            <div class="image-preview"></div>
 
             </div>
             <div class="output-text">Reccomandation Images</div>
         <div class="output-images">
 
-            <div class="rec-images" id="rec-image1"></div>
-            <div class="rec-images" id="rec-image2"></div>
-            <div class="rec-images" id="rec-image3"></div>
-            <div class="rec-images" id="rec-image4"></div>
+            {% if recommended_images %}
+            <div class="rec-images" id="rec-image1">
+                <img src="{{ recommended_images[0] }}" alt="Recommendation 1">
+            </div>
+            <div class="rec-images" id="rec-image2">
+                <img src="{{ recommended_images[1] }}" alt="Recommendation 2">
+            </div>
+            <div class="rec-images" id="rec-image3">
+                <img src="{{ recommended_images[2] }}" alt="Recommendation 3">
+            </div>
+            <div class="rec-images" id="rec-image4">
+                <img src="{{ recommended_images[3]  }}" alt="Recommendation 4">
+            </div>
+        {% else %}
+        <div class="rec-images" id="rec-image1">
+        </div>
+        <div class="rec-images" id="rec-image2">
+        </div>
+        <div class="rec-images" id="rec-image3">
+        </div>
+        <div class="rec-images" id="rec-image4">
+        </div>
+        {% endif %}
         </div>
         </div>
 

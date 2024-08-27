@@ -10,12 +10,10 @@ function upload() {
   }
 }
 
-// Prevent the form from refreshing the page when submitting
+// AJAX to override the default event listener --> Solving ths issue of : reloading the page and image preview getting lost 
 document.querySelector('form').addEventListener('submit', function(event) {
-  event.preventDefault();  // Prevent the default form submission (page reload)
-  
+  event.preventDefault();  
   const formData = new FormData(this);
-  
   fetch('/recommendation', {
       method: 'POST',
       body: formData
