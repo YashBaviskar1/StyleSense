@@ -30,7 +30,7 @@
         <div class="main-body">
             <div class="top-body">
             <div class="upload">
-                <form action="/recommendation" method="post" enctype="multipart/form-data">
+                <form  id="upload-form" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
                 <input type="file" id="image-upload" onchange="upload()" name="image" hidden/>
                 <label for="image-upload" class="upload-label">Upload Image</label>
                 <button type="submit">Show Reccomandation</button>
@@ -41,8 +41,8 @@
             </div>
             <div class="output-text">Reccomandation Images</div>
         <div class="output-images">
-
-            {% if recommended_images %}
+<!--  >--------------------do not need this really, >  
+            < {% if recommended_images %}
             <div class="rec-images" id="rec-image1">
                 <img src="{{ recommended_images[0] }}" alt="Recommendation 1">
             </div>
@@ -55,7 +55,7 @@
             <div class="rec-images" id="rec-image4">
                 <img src="{{ recommended_images[3]  }}" alt="Recommendation 4">
             </div>
-        {% else %}
+        {% else %} -->
         <div class="rec-images" id="rec-image1">
         </div>
         <div class="rec-images" id="rec-image2">
@@ -64,7 +64,7 @@
         </div>
         <div class="rec-images" id="rec-image4">
         </div>
-        {% endif %}
+        <!-- {% endif %} -->
         </div>
         </div>
 

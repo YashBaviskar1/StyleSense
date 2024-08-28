@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, jsonify, send_from_directory
 import os
 from PIL import Image
 import numpy as np
@@ -10,7 +10,7 @@ from tensorflow.keras.applications.resnet50 import ResNet50,preprocess_input
 from sklearn.neighbors import NearestNeighbors
 from numpy.linalg import norm
 
-app = Flask(__name__)
+app = Flask(__name__, )
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 
 feature_list = np.array(pickle.load(open('embeddings.pkl','rb')))
@@ -35,18 +35,33 @@ def recommendation():
         if 'image' in request.files:
             image = request.files['image']
             image.save(os.path.join(UPLOAD_FOLDER, image.filename))
-            features = feature_extraction(os.path.join(UPLOAD_FOLDER , image.filename),model)
-            indices = recommend(features, feature_list)
+#-----------> Fix the Issue : filenames.pkl fix then unedit these lines ------------------<
+            # features = feature_extraction(os.path.join(UPLOAD_FOLDER , image.filename),model)
+            # indices = recommend(features, feature_list)
+#---------------------------------------------------------------------------------------------------------
+#>---------------Static INDICES, Someone messed up the filenames.pkl real time or me like a fucking idiot got the wrong directory, i will check this later ------------------<
+#--------------Yes i know critical failure from my part -----------<
+            indices = [1163,1164,1165,10000]
 
             for i in range(0,4):
-                img_path = os.path.join('static', 'datasets', 'images', f"{indices[0][i]}.jpg")
+                img_path = os.path.join('static', 'datasets', 'images', f"{indices[i]}.jpg")
                 recommended_images.append(img_path)
             print(recommended_images)
-            return render_template("recommendation.html", recommended_images=recommended_images)
-    return render_template("recommendation.html")
+            return jsonify(recommended_images=recommended_images)
 
+
+    return render_template("recommendation.html")
+#--------------> very important to RETURN the files from the dir ------------<
+@app.route('/static/datasets/images/<filename>')
+def serve_image(filename):
+    print("routing here seeee meeee : ", filename)
+    return send_from_directory('static/datasets/images', filename)
 # 'datasets/images/' + str(indices[0][i]) + '.jpg'
 #static\datasets\images\1163.jpg
+#"static\datasets\images\1164.jpg"
+#"static\datasets\images\1165.jpg"
+#static\datasets\images\10000.jpg"
+
 
 def feature_extraction(img_path,model):
     img = image.load_img(img_path, target_size=(224, 224))
