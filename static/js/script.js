@@ -69,7 +69,7 @@ async function handleFormSubmit(event) {
   console.log(data.recommended_images)
   displayImages(data.recommended_images);
 }
-// >-------------- Display Images handling, yes i know it sucks i will make it scalable later -------------<
+// ##### >-------------- Display Images handling, yes i know it sucks i will make it scalable later -------------< #####
 function displayImages(images){
   console.log(`url(${images[0].replace(/\\/g, '/')})`)
   document.getElementById('rec-image1').style.backgroundImage = `url(${images[0].replace(/\\/g, '/')})`;
