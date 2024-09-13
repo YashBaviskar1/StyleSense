@@ -78,3 +78,6 @@ function displayImages(images){
   document.getElementById('rec-image4').style.backgroundImage = `url(${images[3].replace(/\\/g, '/')})`;
 }
 
+
+
+// ##-CLASSIFICATION-OUTFIT-GENERATION-MODULE 
