@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/classify.css') }}">
+    <title>Outfit generator</title>
+</head>
+<body>
+    <div class="hero">
+        <div class="header">
+            <div class="logo">Outfit generator</div>
+            <ul>
+                <li><a href = "#">Register</a></li>
+                <li><a href = "#">Login</a></li>
+                <li><a href = "#">About us</a></li>
+            </ul>
+        </div>
+        <div class="hero-content">
+            <div class="upload">
+                <form  id="upload-form" enctype="multipart/form-data" onsubmit="classify(event)">
+                <input type="file"  id="image-upload" onchange="upload2()" name="image" hidden/>
+                <label for="image-upload" class="upload-label">Upload Image</label>
+                <div>
+                    <button type="submit" id="predict-button" style="display: none;">Predict</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="page-body">
+        <div class="part-1">
+
+            <div class="image-preview"></div>
+            <div class="classify">
+                Category : 
+            </div>
+
+        </div>
+        <div class="outfit">
+            <form id="outfit-gen" onsubmit="generateoutfit()"> 
+                <button>Generate outfit</button>
+                <input type="checkbox" id="inventory">
+                <label for="inventory">From Inventory</label>
+            </form>
+        
+            <div class="outfit-section">
+            </div>
+
+        </div>
+    </div>
+    <div class="footer">
+        <div> Copyright © Yash Baviskar</div>
+    </div>
+    <script src="{{ url_for('static', filename ='js/classify.js') }}"></script>
+</body>
+</html>
+
