@@ -76,6 +76,10 @@ function displayImages(images){
   document.getElementById('rec-image2').style.backgroundImage = `url(${images[1].replace(/\\/g, '/')})`;
   document.getElementById('rec-image3').style.backgroundImage = `url(${images[2].replace(/\\/g, '/')})`;
   document.getElementById('rec-image4').style.backgroundImage = `url(${images[3].replace(/\\/g, '/')})`;
+  const saveButtons = document.querySelectorAll('.savebut');
+  saveButtons.forEach(button => {
+    button.style.display = 'inline-block';  
+  });
 }
 
 

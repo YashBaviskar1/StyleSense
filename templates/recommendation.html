@@ -3,70 +3,101 @@
 <html>
     <head>
         <title> Reccomandation Page </title>
-        <link rel="stylesheet" href=" {{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href=" {{ url_for('static', filename='css/rec.css') }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     </head>
     <body>
-        <div class="hero">
-            <div class="header">
-                <div class="logo">Homepage</div>
-                <ul>
-                    <li><a href = "#">Register</a></li>
-                    <li><a href = "#">Login</a></li>
-                    <li><a href = "#">About us</a></li>
+    <div class="hero">
+        <section id="header">
+            <a href="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo"></a>
+            <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> -->
+            <button class="login-button">Login/Sign Up</button> <!-- Added login button -->
+    
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="index.html">Home</a></li>
+                    <li><a href="recommendation.html">Recommendation</a></li>
+                    <li><a href="outfitgen.html">Outfit Generator</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
                 </ul>
             </div>
-            <div class="hero-content">
-                <div class="hero-text-rec-page">
-                <div class="heading-text-rec-page">Find similar clothes</div>
-                <div class="subtext-rec-page">From our extensive fashion inventory with over 40000+ product, curate your taste by infoming us 
-                </div>
-                </div>
+        </section>
+    </div>
+    <section id="HomeText">
+        <div class="carousel-container">
+            <div class="carousel-slide">
+                <img src="{{ url_for('static', filename='images/caro1.png') }}" alt="Option 1">
+
             </div>
         </div>
-
-        <div class="main-body">
-            <div class="top-body">
-            <div class="upload">
+    </section>
+    <section id ="banner1" class="padding">
+    
+        <div class="neon">
+            <h3>Upload your Image to get reccomandations from our inbuilt inventory</h3>
+            <div class="upload-2">
+                
                 <form  id="upload-form" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
                 <input type="file" id="image-upload" onchange="upload()" name="image" hidden/>
+
                 <label for="image-upload" class="upload-label">Upload Image</label>
-                <button type="submit">Show Reccomandation</button>
+                
+                <button type="submit" class="show">Show Reccomandation</button>
                 </form>
             </div>
-            <div class="image-preview"></div>
+        </div>
 
-            </div>
-            <div class="output-text">Reccomandation Images</div>
-        <div class="output-images">
-<!--  >--------------------do not need this really, >  
-            < {% if recommended_images %}
-            <div class="rec-images" id="rec-image1">
-                <img src="{{ recommended_images[0] }}" alt="Recommendation 1">
-            </div>
-            <div class="rec-images" id="rec-image2">
-                <img src="{{ recommended_images[1] }}" alt="Recommendation 2">
-            </div>
-            <div class="rec-images" id="rec-image3">
-                <img src="{{ recommended_images[2] }}" alt="Recommendation 3">
-            </div>
-            <div class="rec-images" id="rec-image4">
-                <img src="{{ recommended_images[3]  }}" alt="Recommendation 4">
-            </div>
-        {% else %} -->
-        <div class="rec-images" id="rec-image1">
+    </section> 
+    <div class="main-body">
+        <div class="top-body">
+        <div class="image-preview">
+            <!-- #<button class="savebut">Save</button> -->
         </div>
-        <div class="rec-images" id="rec-image2">
+
         </div>
-        <div class="rec-images" id="rec-image3">
+        <div class="output-text">Reccomandation Images</div>
+    <div class="output-images">
+    <div id="recommendation">
+
+        <!-- 1st recommended image -->
+        <div class="rec-container rec-images" id="rec-image1">
+          <h2>1st</h2>
+          
+          
+          <button class="savebut">Save</button>
         </div>
-        <div class="rec-images" id="rec-image4">
+        
+        <!-- 2nd recommended image -->
+        <div class="rec-container rec-images" id="rec-image2">
+          <h2>2nd</h2>
+          
+          
+          <button class="savebut">Save</button>
         </div>
-        <!-- {% endif %} -->
+        
+        <!-- 3rd recommended image -->
+        <div class="rec-container rec-images" id="rec-image3">
+          <h2>3rd</h2>
+          
+          
+          <button class="savebut">Save</button>
+          
         </div>
+        
+        <!-- 4th recommended image -->
+        <div class="rec-container rec-images" id="rec-image4">
+          <h2>4th</h2>
+          
+          
+          <button class="savebut">Save</button>
         </div>
+      </div>
+    </div>
+    </div>
 
         <script src="{{ url_for('static', filename ='js/script.js') }}"></script>
     </body>

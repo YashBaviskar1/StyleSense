@@ -4,3 +4,5 @@ datasets/
 static/uploads/
 embeddings.pkl
 filenames.pkl
+static/outfits/
+static/models/

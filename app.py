@@ -11,7 +11,7 @@ from sklearn.neighbors import NearestNeighbors
 from tensorflow.keras.models import load_model
 import glob
 from numpy.linalg import norm
-
+import random
 app = Flask(__name__, )
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 
@@ -74,6 +74,8 @@ def classify():
         return jsonify({'category': predicted_label}) 
     return render_template("classify.html")
 
+
+
 def feature_extraction(img_path,model):
     img = image.load_img(img_path, target_size=(224, 224))
     img_array = image.img_to_array(img)
@@ -92,13 +94,13 @@ def recommend(features,feature_list):
 
     return indices
 
-
+image_seen = []
 def predict_img(img_path):
     img = image.load_img(img_path, target_size=(224, 224))  
     img_array = image.img_to_array(img) 
     img_array = np.expand_dims(img_array, axis=0)  
     img_array = tensorflow.keras.applications.vgg16.preprocess_input(img_array)  
-    # Predict the class of the image
+
     predictions = classification_model.predict(img_array)
 
     predicted_class = np.argmax(predictions, axis=1)
@@ -107,4 +109,42 @@ def predict_img(img_path):
                     'shirt', 'shoes', 'shorts', 'skirts', 't-shirt']
 
     print(f'Predicted class: {class_labels[predicted_class[0]]}')
+    image_seen.append(class_labels[predicted_class[0]])
     return class_labels[predicted_class[0]]
+
+def outfit_generation():
+    outfits_dir = "static/outfits"  
+
+ 
+    if not image_seen:
+        return "No image detected for outfit generation."
+
+    detected_class = image_seen[0]
+
+    outfit_combinations = {
+        "dress": ["hat", "shoes"],
+        "hat": ["t-shirt", "pants"],
+        "longsleeve": ["pants", "shoes"],
+        "outwear": ["pants", "shirt"],
+        "pants": ["shirt", "shoes"],
+        "shirt": ["pants", "shoes"],
+        "shoes": ["pants", "shirt"],
+        "shorts": ["t-shirt", "shoes"],
+        "skirts": ["t-shirt", "shoes"],
+        "t-shirt": ["shorts", "shoes"]
+    }
+
+
+    matching_items = outfit_combinations.get(detected_class, [])
+
+ 
+    selected_outfit = {}
+    for item in matching_items:
+        item_dir = os.path.join(outfits_dir, item)
+        if os.path.exists(item_dir) and os.listdir(item_dir):  
+            selected_file = random.choice(os.listdir(item_dir))
+            selected_outfit[item] = os.path.join(item_dir, selected_file)
+        else:
+            selected_outfit[item] = "No items found in this category."
+
+    return selected_outfit
