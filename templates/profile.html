@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href=" {{ url_for('static', filename='css/profile.css') }}">
+
+  
+</head>
+<body>
+
+  <section id="header">
+    <a href="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo"></a>
+    <button class="login-button">Login/Sign Up</button> <!-- Added login button -->
+
+    <div>
+      <ul id="navbar">
+          <li><a class="active" href="/">Home</a></li>
+          <li><a href="recommendation">Recommendation</a></li>
+          <li><a href="classify">Outfit Generator</a></li>
+          <li><a href="profile">Profile</a></li>
+          <li><a href="#">About Us</a></li>
+      </ul>
+  </div>
+</section>
+
+  <!-- Navigation Bar -->
+  <!-- <nav class="navbar">
+    <ul>
+      <li><a href="#" onclick="loadContent('home')">Home</a></li>
+      <li><a href="#" onclick="loadContent('about-us')">About Us</a></li>
+      <li><a href="#" onclick="loadContent('recommendation')">Recommendation</a></li>
+      <li><a href="#" onclick="loadContent('sign in')">Contact</a></li>
+    </ul>
+  </nav> -->
+
+  <!-- Welcome Section -->
+  <section class="welcome-section">
+    <h1>Welcome to Your Fashion Profile!</h1>
+    <p>Manage your outfits, images, and inventory with ease.</p>
+  </section>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+      <ul>
+        <li><a href="#" onclick="loadContent('saved-images')">Saved Images</a></li>
+        <li><a href="#" onclick="loadContent('saved-outfits')">Saved Outfits</a></li>
+        <li><a href="#" onclick="loadContent('inventory')">My Inventory</a></li>
+        <li><a href="#" onclick="loadContent('about-me')">About Me</a></li>
+      </ul>
+    </div>
+
+    <!-- Right Content Area -->
+    <div class="content" id="content-area">
+      <h2>Welcome to Your Profile</h2>
+      <p>Select an option from the left sidebar to view more details.</p>
+    </div>
+  </div>
+
+  <!-- <script src="profile.js"></script> -->
+</body>
+</html>
+
+
+

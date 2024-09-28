@@ -1,0 +1,157 @@
+
+#navbar {
+    display: flex;
+    margin-top: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: #D8D9DA;
+    padding: 30px;
+    gap: 30px; /* Space between navbar items */
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+  }
+  
+  #navbar li {
+    list-style: none;
+  }
+  
+  #navbar li a {
+    text-decoration: none;
+    font-size: 20px; /* Larger font size */
+    color: #875f39; 
+    padding: 10px 25px;
+    font-weight: 600; /* Semi-bold font */
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+    letter-spacing: 1px; /* Spacing between letters */
+  }
+  
+  #navbar li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #4E301F; /* Underline color */
+    transition: width 0.3s ease; /* Smooth underline transition */
+  }
+  
+  #navbar li a:hover::after {
+    width: 100%; /* Full width underline on hover */
+  }
+  
+  #navbar li a:hover {
+    color: #4E301F; /* Darker color on hover */
+    transform: translateY(-5px); /* Slight lift on hover */
+    letter-spacing: 1.5px; /* Increase letter spacing on hover */
+  }
+  
+  /* Keyframe animations */
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  
+  
+  /* Logo styling */
+  .logo {
+    position: absolute;
+    top: 10px;
+    left: 30px;
+    width: 150px;
+    height: auto;
+    box-shadow: #255c90;
+  }
+  
+  
+  /* Login/Sign Up Button */
+  .login-button {
+    position: absolute;
+    top: 30px;
+    right: 100px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4E301F;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    animation: pulse 3s infinite;
+  }
+  
+  .login-button:hover {
+    background-color: #b0b0b0;
+  }
+  
+  .welcome-section {
+    background-color: #f39c12;
+    text-align: center;
+    padding:15 px;
+    color: white;
+  }
+  
+  .welcome-section h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .welcome-section p {
+    font-size: 18px;
+  }
+  
+  /* Main container */
+  .container {
+    display: flex;
+    height: calc(100vh - 160px); /* Adjust height for navbar and welcome section */
+    margin: 20px;
+  }
+  
+  /* Left Sidebar */
+  .sidebar {
+    width: 20%; /* 30% width */
+    background-color: #34495e;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar ul {
+    list-style: none;
+  }
+  
+  .sidebar ul li {
+    margin-bottom: 30px;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  
+  .sidebar ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Right Content Area */
+  .content {
+    width: 80%; /* 70% width */
+    padding: 30px;
+    background-color: white;
+    overflow-y: auto;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  /* General styles for content */
+  .content h2 {
+    font-size: 28px;
+    color: #e67e22;
+  }
+  
+  .content p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  

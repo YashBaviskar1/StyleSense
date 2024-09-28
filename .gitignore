@@ -1,8 +1,8 @@
 myenv/
-__pycache__/
 datasets/
 static/uploads/
 embeddings.pkl
 filenames.pkl
 static/outfits/
 static/saved-model
+__pycache__/
