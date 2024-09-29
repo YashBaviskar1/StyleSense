@@ -1,0 +1,68 @@
+from flask import Flask, render_template
+import pandas as pd
+import plotly.express as px
+
+app = Flask(__name__)
+
+# Load the cleaned dataset
+data_cleaned = pd.read_csv('cleaned_nike_data.csv')
+
+# Top 10 Products by Average Rating
+top_10_by_avg_rating = data_cleaned.groupby('name')['avg_rating'].mean().sort_values(ascending=False).head(10)
+
+# Top 10 Products by Number of Reviews
+top_10_by_num_reviews = data_cleaned['name'].value_counts().head(10)
+
+# Top 10 Products by Inventory Count (Ensure this column exists in the dataset)
+top_10_by_inventory = data_cleaned.groupby('name')['inventory_count'].sum().sort_values(ascending=False).head(10)
+
+# Plotting Top 10 Products by Average Rating
+def plot_top_10_avg_rating(top_10_data):
+    fig = px.bar(top_10_data, x=top_10_data.index, y=top_10_data.values,
+                 title="Top 10 Products by Average Rating", labels={'x': 'Product Name', 'y': 'Average Rating'},
+                 template='plotly_white')
+    fig.update_layout(barmode='group', title_x=0.5)
+    return fig.to_html(full_html=False)
+
+# Plotting Top 10 Products by Number of Reviews
+def plot_top_10_num_reviews(top_10_data):
+    fig = px.bar(top_10_data, x=top_10_data.index, y=top_10_data.values,
+                 title="Top 10 Products by Number of Reviews", labels={'x': 'Product Name', 'y': 'Number of Reviews'},
+                 template='plotly_white')
+    fig.update_layout(barmode='group', title_x=0.5)
+    return fig.to_html(full_html=False)
+
+# Plotting Top 10 Products by Inventory Count
+def plot_top_10_inventory(top_10_data):
+    fig = px.bar(top_10_data, x=top_10_data.index, y=top_10_data.values,
+                 title="Top 10 Products by Inventory Count", labels={'x': 'Product Name', 'y': 'Inventory Count'},
+                 template='plotly_white')
+    fig.update_layout(barmode='group', title_x=0.5)
+    return fig.to_html(full_html=False)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/transaction_analysis')
+def transaction_analysis():
+    avg_rating_graph = plot_top_10_avg_rating(top_10_by_avg_rating)
+    num_reviews_graph = plot_top_10_num_reviews(top_10_by_num_reviews)
+    return render_template('transaction_analysis.html', avg_rating_graph=avg_rating_graph, num_reviews_graph=num_reviews_graph)
+
+@app.route('/summary')
+def summary():
+    summary_points = [
+        "Increase promotions for top-rated products.",
+        "Focus on gathering more reviews for less-reviewed items.",
+        "Consider inventory adjustments based on sales trends."
+    ]
+    return render_template('summary.html', summary_points=summary_points)
+
+@app.route('/inventory_analysis')
+def inventory_analysis():
+    inventory_graph = plot_top_10_inventory(top_10_by_inventory)
+    return render_template('inventory_analysis.html', inventory_graph=inventory_graph)
+
+if __name__ == '__main__':
+    app.run(debug=True)

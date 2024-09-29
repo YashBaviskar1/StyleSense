@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Inventory Analysis</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/transaction_analysis">Transaction Analysis</a></li>
+                <li><a href="/inventory_analysis">Inventory Analysis</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div>
+            <h2>Product Availability (In Stock vs Out Of Stock)</h2>
+            {{ availability_graph|safe }}
+        </div>
+        <div>
+            <h2>Price Distribution</h2>
+            <img src="data:image/png;base64,{{ price_distribution_graph }}" alt="Price Distribution">
+        </div>
+        <div>
+            <h2>Top 10 Available Sizes</h2>
+            {{ available_sizes_graph|safe }}
+        </div>
+        <div>
+            <h2>Top 10 Available Colors</h2>
+            {{ available_colors_graph|safe }}
+        </div>
+    </main>
+</body>
+</html>

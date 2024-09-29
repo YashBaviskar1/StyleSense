@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Transaction Analysis</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/transaction_analysis">Transaction Analysis</a></li>
+                <li><a href="/inventory_analysis">Inventory Analysis</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div>
+            <h2>Top 10 Products by Average Rating</h2>
+            {{ avg_rating_graph|safe }}
+        </div>
+        <div>
+            <h2>Top 10 Products by Number of Reviews</h2>
+            {{ num_reviews_graph|safe }}
+        </div>
+    </main>
+</body>
+</html>
