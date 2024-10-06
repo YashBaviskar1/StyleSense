@@ -12,8 +12,25 @@ from tensorflow.keras.models import load_model
 import glob
 from numpy.linalg import norm
 import random
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
+
 app = Flask(__name__, )
+app.secret_key = 'azuitupop'  #session management
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+db = SQLAlchemy(app)
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
+
+with app.app_context():
+    db.create_all()
+
 
 feature_list = np.array(pickle.load(open('embeddings.pkl','rb')))
 filenames = pickle.load(open('filenames.pkl','rb'))
@@ -28,28 +45,51 @@ model = tensorflow.keras.Sequential([
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    firstname = session.get('firstname')
+    return render_template("index.html", firstname=firstname)
 
-@app.route('/login')
+@app.route('/login', methods = ['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+
+        if user and check_password_hash(user.password, password):
+            session['firstname'] = user.firstname  
+            return redirect(url_for('index'))
+        else:
+            flash('Login failed. Check your email and/or password.', 'danger')
     return render_template("login.html")
 
-@app.route('/register')
+@app.route('/register', methods = ['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        firstname = request.form['firstname']
+        email = request.form['email']
+        password = generate_password_hash(request.form['password'])
+
+        new_user = User(firstname=firstname, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash('Registration successful! You can now log in.', 'success')
+        return redirect(url_for('login'))
     return render_template("register.html")
 
 @app.route('/profile')
 def profile():
-    return render_template("profile.html")
+    firstname = session.get('firstname')
+    return render_template("profile.html", firstname= firstname)
 
 @app.route('/recommendation', methods = ['GET', 'POST'])
 def recommendation():
+    firstname = session.get('firstname') 
+    print(firstname)
     recommended_images = []
     if request.method == 'POST':
         if 'image' in request.files:
             image = request.files['image']
             image.save(os.path.join(UPLOAD_FOLDER, image.filename))
-#-----------> Fix the Issue : filenames.pkl fix then unedit these lines ------------------<
             features = feature_extraction(os.path.join(UPLOAD_FOLDER , image.filename),model)
             indices = recommend(features, feature_list)
 #---------------------------------------------------------------------------------------------------------
@@ -63,7 +103,7 @@ def recommendation():
             return jsonify(recommended_images=recommended_images)
 
 
-    return render_template("recommendation.html")
+    return render_template("recommendation.html",  firstname = firstname)
 #--------------> very important to RETURN the files from the dir ------------<
 @app.route('/static/datasets/images/<filename>')
 def serve_image(filename):
@@ -77,6 +117,7 @@ def serve_image(filename):
 
 @app.route('/classify', methods = ['GET', 'POST'])
 def classify():
+    firstname = session.get('firstname') 
     if request.method == 'POST':
         image_file = request.files['image']
         img_path = os.path.join(UPLOAD_FOLDER, image_file.filename) 
@@ -84,9 +125,12 @@ def classify():
         image_file.save(img_path)
         predicted_label = predict_img(img_path)
         return jsonify({'category': predicted_label}) 
-    return render_template("classify.html")
+    return render_template("classify.html", firstname=firstname)
 
-
+@app.route('/logout')
+def logout():
+    session.pop('firstname', None)  
+    return redirect(url_for('login'))
 
 def feature_extraction(img_path,model):
     img = image.load_img(img_path, target_size=(224, 224))
@@ -160,3 +204,7 @@ def outfit_generation():
             selected_outfit[item] = "No items found in this category."
 
     return selected_outfit
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

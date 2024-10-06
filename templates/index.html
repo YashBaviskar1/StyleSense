@@ -18,11 +18,17 @@
             <div class="header">
                 <div class="logo">Homepage</div>
                 <ul>
-                    <li><a href = "register">Register</a></li>
-                    <li><a href = "login">Login</a></li>
-                    <li><a href = "profile">About us</a></li>
+                    {% if firstname %}
+                        <li>Hello, {{ firstname }}</li>
+                        <li><a href="logout">Logout</a></li>
+                    {% else %}
+                        <li><a href="register">Register</a></li>
+                        <li><a href="login">Login</a></li>
+                    {% endif %}
+                    <li><a href="profile">About us</a></li>
                 </ul>
             </div>
+        </div>
             <div class="hero-content">
                 <div class="hero-text">
                 <div class="heading-text">StyleSense</div>

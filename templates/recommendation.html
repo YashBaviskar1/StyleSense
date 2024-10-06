@@ -14,15 +14,22 @@
         <section id="header">
             <a href="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo"></a>
             <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> -->
-            <button class="login-button">Login/Sign Up</button> <!-- Added login button -->
+            {% if firstname %}
+                <span></span>
+            {% else %}
+                <button class="login-button">Login/Sign Up  L</button>
+            {% endif %}
     
             <div>
                 <ul id="navbar">
                     <li><a class="active" href="/">Home</a></li>
-                    <li><a href="recommendation">Recommendation</a></li>
-                    <li><a href="classify">Outfit Generator</a></li>
-                    <li><a href="profile">Profile</a></li>
+                    <li><a href="{{ url_for('recommendation') }}">Recommendation</a></li>
+                    <li><a href="{{ url_for('classify') }}">Outfit Generator</a></li>
+                    <li><a href="{{ url_for('profile') }}">Profile</a></li>
                     <li><a href="aboutus.html">About Us</a></li>
+                    {% if firstname %}
+                    <li>Welcome, {{ firstname }}</li>
+                    {% endif %}
                 </ul>
             </div>
         </section>
