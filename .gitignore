@@ -6,3 +6,5 @@ filenames.pkl
 static/outfits/
 static/saved-model
 __pycache__/
+test2.py 
+instance/

@@ -154,4 +154,19 @@
     font-size: 16px;
     line-height: 1.6;
   }
-  
+  .saved-images {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.image-item {
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.image-item img {
+    max-width: 100px; /* Set a max width for the images */
+    height: auto;
+}

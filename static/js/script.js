@@ -71,15 +71,34 @@ async function handleFormSubmit(event) {
 }
 // ##### >-------------- Display Images handling, yes i know it sucks i will make it scalable later -------------< #####
 function displayImages(images){
-  console.log(`url(${images[0].replace(/\\/g, '/')})`)
-  document.getElementById('rec-image1').style.backgroundImage = `url(${images[0].replace(/\\/g, '/')})`;
-  document.getElementById('rec-image2').style.backgroundImage = `url(${images[1].replace(/\\/g, '/')})`;
-  document.getElementById('rec-image3').style.backgroundImage = `url(${images[2].replace(/\\/g, '/')})`;
-  document.getElementById('rec-image4').style.backgroundImage = `url(${images[3].replace(/\\/g, '/')})`;
-  const saveButtons = document.querySelectorAll('.savebut');
-  saveButtons.forEach(button => {
-    button.style.display = 'inline-block';  
-  });
+  for (let i = 0; i < images.length; i++) {
+    const imagePath = images[i].replace(/\\/g, '/');
+    
+
+    document.getElementById(`rec-image${i + 1}`).style.backgroundImage = `url(${imagePath})`;
+    const saveButton = document.getElementById(`save-button${i + 1}`);
+    saveButton.style.display = 'inline-block';  
+    saveButton.onclick = () => saveImage(imagePath);
+  }
+}
+
+
+function saveImage(imagePath) {
+    fetch('/save_recommendation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ image_path: imagePath })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Image saved successfully');
+        } else {
+            alert('Error saving image');
+        }
+    });
 }
 
 

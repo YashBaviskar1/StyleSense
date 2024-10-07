@@ -27,7 +27,11 @@ class User(db.Model):
     firstname = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-
+class SavedRecommendation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    image_path = db.Column(db.String(255), nullable=False)
+    user = db.relationship('User', backref=db.backref('recommendations', lazy=True))
 with app.app_context():
     db.create_all()
 
@@ -57,6 +61,7 @@ def login():
 
         if user and check_password_hash(user.password, password):
             session['firstname'] = user.firstname  
+            session['user_id'] = user.id  
             return redirect(url_for('index'))
         else:
             flash('Login failed. Check your email and/or password.', 'danger')
@@ -79,7 +84,9 @@ def register():
 @app.route('/profile')
 def profile():
     firstname = session.get('firstname')
-    return render_template("profile.html", firstname= firstname)
+    user = User.query.filter_by(firstname=firstname).first()  
+    saved_images = SavedRecommendation.query.filter_by(user_id=user.id).all() if user else []
+    return render_template("profile.html", firstname= firstname,  saved_images=saved_images)
 
 @app.route('/recommendation', methods = ['GET', 'POST'])
 def recommendation():
@@ -104,6 +111,21 @@ def recommendation():
 
 
     return render_template("recommendation.html",  firstname = firstname)
+@app.route('/save_recommendation', methods=['POST'])
+def save_recommendation():
+    firstname = session['firstname']
+    user = User.query.filter_by(firstname=firstname).first()
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    image_path = request.json.get('image_path')
+
+    new_recommendation = SavedRecommendation(user_id=user.id, image_path=image_path)
+    db.session.add(new_recommendation)
+    db.session.commit()
+
+    return jsonify({"success": True, "message": "Image saved successfully"})
 #--------------> very important to RETURN the files from the dir ------------<
 @app.route('/static/datasets/images/<filename>')
 def serve_image(filename):
@@ -126,6 +148,22 @@ def classify():
         predicted_label = predict_img(img_path)
         return jsonify({'category': predicted_label}) 
     return render_template("classify.html", firstname=firstname)
+
+@app.route('/saved_images', methods = ['GET', 'POST'])
+def saved_images():
+    saved_imgs = []
+    firstname = session.get('firstname') 
+    print(firstname)
+    user_id = session.get('user_id')
+    print(user_id)
+    recommendations = SavedRecommendation.query.filter_by(user_id=user_id).all()
+    print("\nSaved Image Paths for User ID:", user_id)
+    for rec in recommendations:
+        print(rec.image_path)
+        img = rec.image_path.replace("static/","")
+        saved_imgs.append(img)
+    print(saved_imgs)
+    return render_template("profile-saved-image.html", firstname=firstname, saved_imgs=saved_imgs)
 
 @app.route('/logout')
 def logout():
