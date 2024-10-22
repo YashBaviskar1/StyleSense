@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Profile</title>
-  <link rel="stylesheet" href=" {{ url_for('static', filename='css/profile.css') }}">
+  <link rel="stylesheet" href=" {{ url_for('static', filename='css/profile-ivn.css') }}">
 
   
 </head>
@@ -13,7 +13,7 @@
   <section id="header">
     <a href="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo"></a>
     {% if firstname %}
-    <span></span>
+    <li>Welcome, {{ firstname }}</li>
     {% else %}
     <button class="login-button">Login/Sign Up  L</button>
     {% endif %}
@@ -63,15 +63,37 @@
     </div>
 
     <div class="content" id="content-area">
-      <h2>Welcome to Your Profile</h2>
-          <div>
-        <h3></h3>
-        <div class="image-container">
+      <h2>Welcome to Your Inventory</h2>
+      <div class="my-inventory">
+        <div class="my-inventory-1">
+            <div class="my-inventory-text"> MY INVENTORY </div>
+            <form id="inventory-upload" oninput="inventoryUploads()"> 
+                <input class="inventory-upload-file" type="file" name="upload" id="upload" multiple accept=".jpeg,.jpg,.png">
+                <button type="submit" id="smbt-button" style="display: none;">Submit</button>
+            </form>
+            
+            <div>
+            <button id="autoclassify-btn" style="display:none;" onclick="autoClassify()">Auto-classify</button>
+            </div>
+            <!-- Image preview container -->
+            <div id="image-preview"></div>
         </div>
+
+
+
+    </div>
+    
+    <div class="my-inventory-img">
+
+        <div>
+            <button id="submit-btn" style="display:none;" onclick="submitInventory()">Submit</button>
+        </div>
+    </div>
+    
       </div>
     </div>
 </body>
-
+ <script src="{{ url_for('static', filename='js/inv.js') }}"></script>
 </html>
 
 

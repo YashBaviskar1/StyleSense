@@ -2,63 +2,69 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/classify.css') }}">
-    <title>Outfit generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/classify.css') }}">
+    <title>Outfit Generator</title>
 </head>
 <body>
     <div class="hero">
         <div class="header">
-            <div class="logo">Outfit generator</div>
+            <div class="logo">Outfit Generator</div>
             <ul>
                 {% if firstname %}
                 <li>Hello, {{ firstname }}</li>
                 <li><a href="logout">Logout</a></li>
-            {% else %}
+                {% else %}
                 <li><a href="register">Register</a></li>
                 <li><a href="login">Login</a></li>
-            {% endif %}
-                <li><a href = "#">About us</a></li>
+                {% endif %}
+                <li><a href="#">About Us</a></li>
             </ul>
         </div>
         <div class="hero-content">
             <div class="upload">
-                <form  id="upload-form" enctype="multipart/form-data" onsubmit="classify(event)">
-                <input type="file"  id="image-upload" onchange="upload2()" name="image" hidden/>
-                <label for="image-upload" class="upload-label">Upload Image</label>
-                <div>
-                    <button type="submit" id="predict-button" style="display: none;">Predict</button>
-                </div>
+                <form id="upload-form" enctype="multipart/form-data" onsubmit="classify(event)">
+                    <input type="file" id="image-upload" onchange="upload2()" name="image" hidden/>
+                    <label for="image-upload" class="upload-label">Upload Image</label>
+                    <div>
+                        <button type="submit" id="predict-button" style="display: none;">Predict</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
-
     <div class="page-body">
         <div class="part-1">
-
             <div class="image-preview"></div>
             <div class="classify">
-                Category : 
+                Category: 
             </div>
-
         </div>
-        <!-- <div class="outfit">
-            <form id="outfit-gen" onsubmit="generateoutfit()"> 
-                <button>Generate outfit</button>
-                <input type="checkbox" id="inventory">
-                <label for="inventory">From Inventory</label>
+
+        <div class="outfit">
+            <form id="outfit-gen" action="{{ url_for('generate_outfit') }}" method="POST">
+                <button type="submit">Generate Outfit</button>
             </form>
-        
-            <div class="outfit-section">
-            </div>
+            <div id="outfit-section">
+                {% if outfit_images %}
+                    {% for item, path in outfit_images.items() %}
+                        {% if path != "No items found in this category." %}
+                            <img src="{{ url_for('static', filename=path) }}" alt="{{ item }}" style="width: 200px; height: auto; margin: 10px;">
+                        {% else %}
+                            <p></p>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>No outfit generated yet. Click "Generate Outfit" to create one.</p>
+                {% endif %}
+                <!-- <img src="{{ url_for('static', filename='outfits/hat/a283e901-d8da-4be1-91ae-2a3c94de48a2.jpg') }}" alt="egg1" style="width: 200px; height: auto; margin: 10px;"> -->
 
+            </div>
         </div>
-    </div> -->
     <div class="footer">
-        <div> Copyright © Yash Baviskar</div>
+        <div>Copyright © Yash Baviskar</div>
     </div>
-    <script src="{{ url_for('static', filename ='js/classify.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/classify.js') }}"></script>
 </body>
 </html>
-

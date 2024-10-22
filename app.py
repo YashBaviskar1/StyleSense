@@ -15,7 +15,12 @@ import random
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
+import pandas as pd
+import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
+import io
+import base64
 app = Flask(__name__, )
 app.secret_key = 'azuitupop'  #session management
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -49,9 +54,12 @@ model = tensorflow.keras.Sequential([
 
 @app.route('/')
 def index():
+    return render_template("frontpage.html")
+
+@app.route('/frontpage')
+def frontpage():
     firstname = session.get('firstname')
     return render_template("index.html", firstname=firstname)
-
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -62,7 +70,7 @@ def login():
         if user and check_password_hash(user.password, password):
             session['firstname'] = user.firstname  
             session['user_id'] = user.id  
-            return redirect(url_for('index'))
+            return redirect(url_for('frontpage'))
         else:
             flash('Login failed. Check your email and/or password.', 'danger')
     return render_template("login.html")
@@ -136,7 +144,7 @@ def serve_image(filename):
 #"static\datasets\images\1164.jpg"
 #"static\datasets\images\1165.jpg"
 #static\datasets\images\10000.jpg"
-
+image_seen = []
 @app.route('/classify', methods = ['GET', 'POST'])
 def classify():
     firstname = session.get('firstname') 
@@ -146,6 +154,7 @@ def classify():
         print(img_path)
         image_file.save(img_path)
         predicted_label = predict_img(img_path)
+        image_seen.append(predicted_label)
         return jsonify({'category': predicted_label}) 
     return render_template("classify.html", firstname=firstname)
 
@@ -164,6 +173,40 @@ def saved_images():
         saved_imgs.append(img)
     print(saved_imgs)
     return render_template("profile-saved-image.html", firstname=firstname, saved_imgs=saved_imgs)
+
+@app.route('/inventory', methods=['POST', 'GET'])
+def inventory():
+    firstname = session.get('firstname') 
+    if request.method == 'POST':
+        predicted_labels = []
+        uploaded_files = request.files.getlist('upload')
+        if not uploaded_files:
+            return jsonify({'error': 'No files uploaded'}), 400
+        
+        for image_file in uploaded_files:
+            img_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
+            image_file.save(img_path)
+            
+            predicted_label = predict_img(img_path)
+            predicted_labels.append(predicted_label)
+        return jsonify({'categories': predicted_labels})
+
+    return render_template("profile-inventory.html", firstname=firstname)
+
+
+@app.route('/classify/generate', methods=['GET', 'POST'])
+def generate_outfit():
+    firstname = session.get('firstname') 
+    generated_outfit = outfit_generation()  
+
+    outfit_images = {
+        item: path.replace("static\\", "").replace("\\", "/") for item, path in generated_outfit.items()
+    }
+    print("Generated Outfit Images:", outfit_images)
+    outfit_images2 = {key: value.replace('static/', '') for key, value in outfit_images.items()}
+    print(outfit_images2)
+    return render_template("classify.html", firstname=firstname, outfit_images=outfit_images2)
+
 
 @app.route('/logout')
 def logout():
@@ -188,7 +231,7 @@ def recommend(features,feature_list):
 
     return indices
 
-image_seen = []
+
 def predict_img(img_path):
     img = image.load_img(img_path, target_size=(224, 224))  
     img_array = image.img_to_array(img) 
@@ -214,7 +257,7 @@ def outfit_generation():
         return "No image detected for outfit generation."
 
     detected_class = image_seen[0]
-
+    print(detected_class)
     outfit_combinations = {
         "dress": ["hat", "shoes"],
         "hat": ["t-shirt", "pants"],
@@ -225,7 +268,7 @@ def outfit_generation():
         "shoes": ["pants", "shirt"],
         "shorts": ["t-shirt", "shoes"],
         "skirts": ["t-shirt", "shoes"],
-        "t-shirt": ["shorts", "shoes"]
+        "t-shirt": ["pants", "shoes"]
     }
 
 
@@ -243,6 +286,103 @@ def outfit_generation():
 
     return selected_outfit
 
+data_cleaned = pd.read_csv('cleaned_nike_data.csv')
+
+top_10_by_avg_rating = data_cleaned.groupby('name')['avg_rating'].mean().sort_values(ascending=False).head(10)
+
+top_10_by_num_reviews = data_cleaned['name'].value_counts().head(10)
+
+
+def plot_top_10_avg_rating(top_10_data):
+    fig = px.bar(top_10_data, x=top_10_data.index, y=top_10_data.values,
+                 title="Top 10 Products by Average Rating", labels={'x': 'Product Name', 'y': 'Average Rating'},
+                 template='plotly_white')
+    return fig.to_html(full_html=False)
+
+def plot_top_10_num_reviews(top_10_data):
+    fig = px.bar(top_10_data, x=top_10_data.index, y=top_10_data.values,
+                 title="Top 10 Products by Number of Reviews", labels={'x': 'Product Name', 'y': 'Number of Reviews'},
+                 template='plotly_white')
+    return fig.to_html(full_html=False)
+
+
+def plot_availability(data):
+    availability_counts = data['availability'].value_counts()
+    fig = px.bar(availability_counts, x=availability_counts.index, y=availability_counts.values,
+                 title="Product Availability (In Stock vs Out Of Stock)", labels={'x': 'Availability', 'y': 'Count'},
+                 template='plotly_white')
+    return fig.to_html(full_html=False)
+
+# Plot Price Distribution using Seaborn
+def plot_price_distribution(data):
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data['price'], bins=20, kde=True, color='blue')
+    plt.title('Price Distribution')
+    plt.xlabel('Price')
+    plt.ylabel('Frequency')
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    plt.close()
+    img.seek(0)
+    return base64.b64encode(img.getvalue()).decode('utf-8')
+
+# Plot Available Sizes using a bar graph
+def plot_available_sizes(data):
+    available_sizes_counts = data['available_sizes'].value_counts().head(10)
+    fig = px.bar(available_sizes_counts, x=available_sizes_counts.index, y=available_sizes_counts.values,
+                 title="Top 10 Available Sizes", labels={'x': 'Size', 'y': 'Count'},
+                 template='plotly_white')
+    return fig.to_html(full_html=False)
+
+def plot_available_colors(data):
+    color_counts = data['color'].value_counts().head(10)
+    fig = px.pie(names=color_counts.index, values=color_counts.values, title="Top 10 Available Colors", template='plotly_white')
+    return fig.to_html(full_html=False)
+
+
+def create_summary():
+    total_sales = data_cleaned['price'].count()
+    total_revenue = data_cleaned['price'].sum()
+    average_price = data_cleaned['price'].mean()
+    top_product = data_cleaned.groupby('name')['price'].sum().idxmax()
+    
+    summary_points = [
+        f"Total Sales: {total_sales}",
+        f"Total Revenue: ${total_revenue:,.2f}",
+        f"Average Price: ${average_price:,.2f}",
+        f"Top Selling Product: {top_product}",
+        f"Total Unique Products: {data_cleaned['name'].nunique()}",
+        f"Total Available Stock: {data_cleaned['availability'].value_counts().get('In Stock', 0)}"
+    ]
+    return summary_points
+
+@app.route('/indexb')
+def indexb():
+    return render_template('index-b.html')
+
+@app.route('/transaction_analysis')
+def transaction_analysis():
+    avg_rating_graph = plot_top_10_avg_rating(top_10_by_avg_rating)
+    num_reviews_graph = plot_top_10_num_reviews(top_10_by_num_reviews)
+    return render_template('transaction_analysis.html', avg_rating_graph=avg_rating_graph, num_reviews_graph=num_reviews_graph)
+
+@app.route('/inventory_analysis')
+def inventory_analysis():
+    availability_graph = plot_availability(data_cleaned)
+    price_distribution_graph = plot_price_distribution(data_cleaned)
+    available_sizes_graph = plot_available_sizes(data_cleaned)
+    available_colors_graph = plot_available_colors(data_cleaned)
+    
+    return render_template('inventory_analysis.html',
+                           availability_graph=availability_graph,
+                           price_distribution_graph=price_distribution_graph,
+                           available_sizes_graph=available_sizes_graph,
+                           available_colors_graph=available_colors_graph)
+
+@app.route('/summary')
+def summary():
+    summary_points = create_summary()
+    return render_template('summary.html', summary_points=summary_points)
 
 if __name__ == "__main__":
     app.run(debug=True)

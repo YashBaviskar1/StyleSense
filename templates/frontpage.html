@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home </title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/forms.css') }}">
+  <script type="text/javascript" src="validation.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <div class="image-side-2">
+    </div>
+    <div class="wrapper">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+      
+      <form id="form">
+        <p>If you are a Business Admin:</p>
+        <button type="submit" name="role" value="admin">Business Admin</button>
+      </form>
+      <form id="form-user" action="/frontpage" method="GET">
+        <p>If you are a User:</p>
+        <button type="submit">User</button>
+    </form>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -8,3 +8,4 @@ static/saved-model
 __pycache__/
 test2.py 
 instance/
+cleaned_nike_data.csv

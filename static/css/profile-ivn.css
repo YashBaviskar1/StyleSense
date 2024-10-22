@@ -46,6 +46,7 @@
     letter-spacing: 1.5px; /* Increase letter spacing on hover */
   }
   
+  /* Keyframe animations */
   @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: 1; }
@@ -53,6 +54,7 @@
   
   
   
+  /* Logo styling */
   .logo {
     position: absolute;
     top: 10px;
@@ -132,6 +134,7 @@
     text-decoration: underline;
   }
   
+  /* Right Content Area */
   .content {
     width: 80%; /* 70% width */
     padding: 30px;
@@ -164,6 +167,133 @@
 }
 
 .image-item img {
-    max-width: 100px; 
+    max-width: 100px; /* Set a max width for the images */
     height: auto;
 }
+    .hero a {
+        text-decoration: none;
+        color: #e5e7eb;
+    }
+
+    img {
+        width : 600px;
+        margin-left: 18px;
+    }
+
+    .hero-text {
+        display: flex;
+        flex-direction: column;
+        margin-left: 120px;
+    }
+
+    .hero-content {
+        display: flex;
+        color: #f9faf8;
+        background-color: #c0bbbb;
+        padding: 48px;
+        flex-wrap: wrap;
+        margin-top: 100px;
+
+    }
+
+    .upload {
+        border: 0px;
+        padding: 10px;
+        color: #f9faf8;
+        font-size: 18px;
+        width: 150px;
+        font-weight: 400;
+        background-color: #3882f6;
+        border-radius: 8px;
+    }
+
+    .upload:hover {
+        background-color: #576965; /* Green */
+        color: white;
+    }
+
+    .page-body {
+        display: flex;
+        flex-direction: column;
+    }
+    .part-1 {
+        display: flex;
+
+    }
+
+
+    .image-preview {
+        margin-top: 20px;
+        margin: 40px;
+        padding: 10px;
+        border: 10px solid rgb(143, 140, 140);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-radius: 2rem;
+        height: 300px;
+        width: 350px;
+    }
+
+
+
+    .classify {
+        margin-top: 20px;
+        margin: 40px;
+        padding: 10px;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .outfit {
+        margin: 20px;
+        margin-left: 50px;
+    }
+    button {
+        border: 0px;
+        padding: 10px;
+        color: #f9faf8;
+        font-size: 18px;
+        width: 150px;
+        font-weight: 400;
+        background-color: #3882f6;
+        border-radius: 8px;
+    }
+
+
+#inventory {
+    margin-left: 500px;
+}
+.outfit-section {
+    border: 0px;
+    margin-top: 20px;
+    display: flex;
+    width: auto;
+    background-color: #e5e7eb;
+    align-items: center;
+    flex-direction: column;
+    padding: 48px;
+    flex-wrap: wrap;
+    height: 300px;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1f2937;
+    color: #f5f5f5;
+    padding: 40px;
+}
+
+.smbt-button {
+    border: 0px;
+    padding: 10px;
+    color: #f9faf8;
+    font-size: 18px;
+    width: 150px;
+    font-weight: 400;
+    background-color: #3882f6;
+    border-radius: 8px;
+}
+

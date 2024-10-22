@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory and Transaction Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesb.css') }}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Dashboard</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <div class="summary">
+            <p>This section provides insights into product availability, pricing distribution, and top products.</p>
+        </div>
+
+        <h2>Product Availability</h2>
+        <div id="availability-chart">
+            {{ availability_graph_html|safe }}
+        </div>
+
+        <h2>Price Distribution</h2>
+        <div id="price-distribution-chart">
+            {{ price_distribution_graph_html|safe }}
+        </div>
+
+        <h2>Top 10 Available Sizes</h2>
+        <div id="available-sizes-chart">
+            {{ available_sizes_graph_html|safe }}
+        </div>
+
+        <h2>Top 10 Available Colors</h2>
+        <div id="available-colors-chart">
+            {{ available_colors_graph_html|safe }}
+        </div>
+
+        <h2>Top 10 Products by Average Rating</h2>
+        <div id="top-avg-rating-chart">
+            {{ top_avg_rating_graph_html|safe }}
+        </div>
+
+        <h2>Top 10 Products by Number of Reviews</h2>
+        <div id="top-num-reviews-chart">
+            {{ top_num_reviews_graph_html|safe }}
+        </div>
+    </div>
+</body>
+</html>
