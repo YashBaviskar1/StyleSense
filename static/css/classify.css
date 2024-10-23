@@ -1,4 +1,4 @@
-    * {
+* {
         font-family: 'Roboto';
         padding: 0;
         margin: 0;
@@ -7,15 +7,77 @@
         display: flex;
         flex-direction: column;
     } */
-    .header {
+.header {
         display: flex;
         background-color: #1f2937;
         align-items: center;
         padding-left: 120px;
         padding-top: 20px;
-
+    
     }
-
+/* Navbar styling with font enhancements and animations */
+#navbar {
+    display: flex;
+    margin-top: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: #D8D9DA;
+    padding: 30px;
+    gap: 30px; /* Space between navbar items */
+    font-family: 'Poppins', sans-serif; /* Stylish font */
+  }
+  
+  #navbar li {
+    list-style: none;
+  }
+  
+  #navbar li a {
+    text-decoration: none;
+    font-size: 20px; /* Larger font size */
+    color: #875f39; 
+    padding: 10px 25px;
+    font-weight: 600; /* Semi-bold font */
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+    letter-spacing: 1px; /* Spacing between letters */
+  }
+  
+  #navbar li a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #4E301F; /* Underline color */
+    transition: width 0.3s ease; /* Smooth underline transition */
+  }
+  
+  #navbar li a:hover::after {
+    width: 100%; /* Full width underline on hover */
+  }
+  
+  #navbar li a:hover {
+    color: #4E301F; /* Darker color on hover */
+    transform: translateY(-5px); /* Slight lift on hover */
+    letter-spacing: 1.5px; /* Increase letter spacing on hover */
+  }
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  
+  
+  
+  /* Logo styling */
+  .logo {
+    position: absolute;
+   
+    left: 30px;
+    width: 150px;
+    height: auto;
+    box-shadow: #255c90;
+  }
     .logo {
         font-size: 18px;
         color: #f9faf8;

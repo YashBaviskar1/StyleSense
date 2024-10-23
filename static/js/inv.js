@@ -75,7 +75,9 @@ function autoClassify() {
             label_classify.textContent = `Category: ${category}`;
         });
     })
-
+    .catch(error => {
+        console.error('Error during auto-classification:', error);
+    });
 }
 
 
@@ -84,6 +86,18 @@ function submitInventory(){
     document.querySelectorAll('.category-label').forEach((label) => {
         categories.push(label.textContent.replace('Category: ', '').trim());
     });
+    fetch('/inventory/save', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ categories: categories }),  
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        alert('Categories have been saved successfully!');
+    })
     console.log('Categories saved:', categories);
     alert('Categories have been saved successfully!');
 }

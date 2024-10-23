@@ -37,6 +37,12 @@ class SavedRecommendation(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     image_path = db.Column(db.String(255), nullable=False)
     user = db.relationship('User', backref=db.backref('recommendations', lazy=True))
+class SavedInventory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  
+    image_path = db.Column(db.String(255), nullable=False) 
+    predicted_category = db.Column(db.String(120), nullable=False) 
+    user = db.relationship('User', backref=db.backref('inventory_items', lazy=True))  
 with app.app_context():
     db.create_all()
 
@@ -151,8 +157,12 @@ def classify():
     if request.method == 'POST':
         image_file = request.files['image']
         img_path = os.path.join(UPLOAD_FOLDER, image_file.filename) 
-        print(img_path)
+        img_path = img_path.replace("\\", "/") 
         image_file.save(img_path)
+        print(img_path) 
+        global image_seen
+        image_seen = []
+        session['image_path'] = img_path.replace("static/", "")
         predicted_label = predict_img(img_path)
         image_seen.append(predicted_label)
         return jsonify({'category': predicted_label}) 
@@ -177,23 +187,37 @@ def saved_images():
 @app.route('/inventory', methods=['POST', 'GET'])
 def inventory():
     firstname = session.get('firstname') 
+    if request.method == 'GET':
+        session.pop('image_path', None) 
     if request.method == 'POST':
         predicted_labels = []
+        image_paths = []
         uploaded_files = request.files.getlist('upload')
-        if not uploaded_files:
-            return jsonify({'error': 'No files uploaded'}), 400
-        
         for image_file in uploaded_files:
             img_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
             image_file.save(img_path)
-            
+            image_paths.append(img_path)
             predicted_label = predict_img(img_path)
             predicted_labels.append(predicted_label)
+        session['image_paths'] = image_paths
         return jsonify({'categories': predicted_labels})
 
     return render_template("profile-inventory.html", firstname=firstname)
-
-
+def save_inventory_item(user_id, image_path, predicted_category):
+    new_inventory_item = SavedInventory(user_id=user_id, image_path=image_path, predicted_category=predicted_category)
+    db.session.add(new_inventory_item)
+    db.session.commit()
+@app.route('/inventory/save', methods=['POST'])
+def save_inventory():
+    data = request.get_json()  
+    categories = data.get('categories')
+    user_id = session.get('user_id')  
+    image_paths = session.get('image_paths')
+    for i, category in enumerate(categories):
+        image_path = image_paths[i]
+        save_inventory_item(user_id=user_id, image_path=image_path, predicted_category=category)
+    
+    return jsonify({'message': 'Inventory items saved successfully'}), 200
 @app.route('/classify/generate', methods=['GET', 'POST'])
 def generate_outfit():
     firstname = session.get('firstname') 
@@ -205,7 +229,8 @@ def generate_outfit():
     print("Generated Outfit Images:", outfit_images)
     outfit_images2 = {key: value.replace('static/', '') for key, value in outfit_images.items()}
     print(outfit_images2)
-    return render_template("classify.html", firstname=firstname, outfit_images=outfit_images2)
+    uploaded_image = session.get('image_path')
+    return render_template("classify.html", firstname=firstname, outfit_images=outfit_images2, uploaded_image= uploaded_image)
 
 
 @app.route('/logout')
@@ -259,16 +284,16 @@ def outfit_generation():
     detected_class = image_seen[0]
     print(detected_class)
     outfit_combinations = {
-        "dress": ["hat", "shoes"],
+        "dress": ["hat-w", "sandals"],
         "hat": ["t-shirt", "pants"],
         "longsleeve": ["pants", "shoes"],
-        "outwear": ["pants", "shirt"],
+        "outwear": ["pants", "t-shirt"],
         "pants": ["shirt", "shoes"],
-        "shirt": ["pants", "shoes"],
+        "shirt": ["pants-f", "shoes-f"],
         "shoes": ["pants", "shirt"],
-        "shorts": ["t-shirt", "shoes"],
+        "shorts": ["t-shirt", "shoes-c"],
         "skirts": ["t-shirt", "shoes"],
-        "t-shirt": ["pants", "shoes"]
+        "t-shirt": ["pants", "shoes-c"]
     }
 
 

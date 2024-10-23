@@ -7,18 +7,28 @@
 </head>
 <body>
     <div class="hero">
-        <div class="header">
-            <div class="logo">Outfit Generator</div>
-            <ul>
-                {% if firstname %}
-                <li>Hello, {{ firstname }}</li>
-                <li><a href="logout">Logout</a></li>
-                {% else %}
-                <li><a href="register">Register</a></li>
-                <li><a href="login">Login</a></li>
-                {% endif %}
-                <li><a href="#">About Us</a></li>
-            </ul>
+        <section id="header">
+            <a href="logo"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo"></a>
+            <!-- <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"> -->
+            {% if firstname %}
+                <span></span>
+            {% else %}
+                <button class="login-button">Login/Sign Up  L</button>
+            {% endif %}
+    
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="/frontpage">Home</a></li>
+                    <li><a href="{{ url_for('recommendation') }}">Recommendation</a></li>
+                    <li><a href="{{ url_for('classify') }}">Outfit Generator</a></li>
+                    <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
+                    {% if firstname %}
+                    <li>Welcome, {{ firstname }}</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </section>
         </div>
         <div class="hero-content">
             <div class="upload">
@@ -35,7 +45,12 @@
 
     <div class="page-body">
         <div class="part-1">
-            <div class="image-preview"></div>
+
+            <div class="image-preview">
+                {% if uploaded_image %}
+                    <img src = "{{ url_for('static', filename=uploaded_image) }}" style="width: 200px; height: auto; margin: 10px;">
+                {% endif %}
+            </div>
             <div class="classify">
                 Category: 
             </div>
