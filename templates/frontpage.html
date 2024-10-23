@@ -14,10 +14,10 @@
     <div class="wrapper">
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
       
-      <form id="form">
-        <p>If you are a Business Admin:</p>
-        <button type="submit" name="role" value="admin">Business Admin</button>
-      </form>
+        <form id="form-admin" action="/indexb" method="GET">
+          <p>If you are a Business Admin:</p>
+          <button type="submit" name="role" value="admin">Business Admin</button>
+        </form>
       <form id="form-user" action="/frontpage" method="GET">
         <p>If you are a User:</p>
         <button type="submit">User</button>
