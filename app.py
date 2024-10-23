@@ -385,11 +385,52 @@ def create_summary():
 def indexb():
     return render_template('index-b.html')
 
+def plot_total_price_over_time(data):
+
+    data['Datetime'] = pd.to_datetime(data['Datetime'])
+    
+
+    total_price_by_date = data.groupby(data['Datetime'].dt.date)['total_price'].sum().reset_index()
+    
+
+    fig = px.line(total_price_by_date, x='Datetime', y='total_price',
+                  title='Total Transaction Price Over Time',
+                  labels={'Datetime': 'Date', 'total_price': 'Total Price'},
+                  template='plotly_white')
+    fig.update_layout(xaxis_tickangle=-45) 
+    return fig.to_html(full_html=False)
+def plot_daily_items_bought(data):
+    daily_items = data.groupby('Date')['Num_Items'].sum().reset_index()
+    fig = px.bar(daily_items, x='Date', y='Num_Items', 
+                 title='Total Items Bought Per Day', 
+                 labels={'Date': 'Date', 'Num_Items': 'Number of Items'},
+                 color='Num_Items', template='plotly_white')
+
+    return fig.to_html(full_html=False)
+def plot_items_sold_distribution(data):
+    fig = px.histogram(data, x='Num_Items', nbins=20, 
+                       title='Distribution of Number of Items Sold in Each Transaction',
+                       labels={'Num_Items': 'Number of Items', 'count': 'Frequency'},
+                       color_discrete_sequence=['green'], 
+                       template='plotly_white')
+
+    return fig.to_html(full_html=False)
 @app.route('/transaction_analysis')
 def transaction_analysis():
+    csv_file_path = 'fashion_transactions.csv'
+    df = pd.read_csv(csv_file_path)
+    df = df.drop(columns=['Unnamed: 5', 'Unnamed: 6'])
+    df['Datetime'] = pd.to_datetime(df['Datetime'], format='%d-%m-%Y %H:%M')
+
+    df['Num_Items'] = df['Items_Bought'].apply(lambda x: len(x.split(',')))
+    df['Date'] = df['Datetime'].dt.date
+    total_price_graph = plot_total_price_over_time(df)
+    daily_items_graph = plot_daily_items_bought(df)
+    items_sold_distribution_graph = plot_items_sold_distribution(df)
     avg_rating_graph = plot_top_10_avg_rating(top_10_by_avg_rating)
     num_reviews_graph = plot_top_10_num_reviews(top_10_by_num_reviews)
-    return render_template('transaction_analysis.html', avg_rating_graph=avg_rating_graph, num_reviews_graph=num_reviews_graph)
+
+    return render_template('transaction_analysis.html', total_price_graph=total_price_graph, daily_items_graph= daily_items_graph, items_sold_distribution_graph=items_sold_distribution_graph, avg_rating_graph=avg_rating_graph, num_reviews_graph=num_reviews_graph)
 
 @app.route('/inventory_analysis')
 def inventory_analysis():

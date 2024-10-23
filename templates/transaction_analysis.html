@@ -19,12 +19,24 @@
     </header>
     <main>
         <div>
-            <h2>Top 10 Products by Average Rating</h2>
-            {{ avg_rating_graph|safe }}
+            <h2>Total Transaction Price Over Time</h2>
+            {{ total_price_graph|safe }}
         </div>
         <div>
-            <h2>Top 10 Products by Number of Reviews</h2>
-            {{ num_reviews_graph|safe }}
+            <h2>Total Items Bought Per Day</h2>
+            {{ daily_items_graph|safe }}
+        </div>
+        <div>
+            <h2>Distribution of Number of Items Sold in Each Transaction</h2>
+            {{ items_sold_distribution_graph|safe }}
+        </div>
+        <div>
+            <h2>Frequent Itemsets (Apriori)</h2>
+            {{ apriori_graph|safe }}
+        </div>
+        <div>
+            <h2>Frequent Itemsets (FP-Growth)</h2>
+            {{ fp_growth_graph|safe }}
         </div>
     </main>
 </body>
